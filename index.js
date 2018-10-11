@@ -89,7 +89,7 @@ message.channel.send("Just got back from the break. HAL 9000 was fun. Everything
           if(command === "tx") {
           if(args[0]){
               console.log(`arg: ${args[0]}`);
-                exec(`nkn/./nknc --port 30003 info -t ${args[0]}`, (error, stdout, stderr) => {
+                exec(`../nkn/./nknc --port 30003 info -t ${args[0]}`, (error, stdout, stderr) => {
                 if (error) {
                   console.error(`exec error: ${error}`);
                   return;
@@ -116,7 +116,7 @@ Amount: ${obj['result']['outputs'][0]['value']} NKN :moneybag:`;
                   var rec = obj['result']['outputs'][0]['address'];
                   var nkn = obj['result']['outputs'][0]['value'];
 
-                        exec(`nkn/./nknc --port 30003 info -t ${sendertx}`, (error, stdout, stderr) => {
+                        exec(`../nkn/./nknc --port 30003 info -t ${sendertx}`, (error, stdout, stderr) => {
                         if (error) {
                           console.error(`exec error: ${error}`);
                           return;
@@ -149,11 +149,11 @@ Amount: ${nkn} NKN :moneybag:`;
   }
 
       if(command === "nodev") {
-      var c = `nkn/./nknc --ip testnet-node-0001.nkn.org --port 30003 info -v`;
+      var c = `../nkn/./nknc --ip testnet-node-0001.nkn.org --port 30003 info -v`;
       if(args[0]){
       let ip = args[0];
       console.log(ip);
-      c = `nkn/./nknc --ip ${ip} --port 30003 info -v`;
+      c = `../nkn/./nknc --ip ${ip} --port 30003 info -v`;
     }
     exec(c, (error, stdout, stderr) => {
     if (error) {
@@ -243,7 +243,7 @@ Volume (24h): $${response.data.data.quotes.USD.volume_24h.toFixed(2)}
   }
 
   if(command === "block") {
-  	exec('nkn/./nknc --ip testnet-node-0001.nkn.org --port 30003 info -c', (error, stdout, stderr) => {
+  	exec('../nkn/./nknc --ip testnet-node-0001.nkn.org --port 30003 info -c', (error, stdout, stderr) => {
      if (error) {
        console.error(`exec error: ${error}`);
        message.channel.send("Unable to connect. Please try again later. Go grab a coffee or something!");
@@ -314,7 +314,7 @@ _*Speculative balance calculated at 5:1 testnet:mainnet ratio, at current market
   if(command === "health") {
     var seed=0;
     var node=0;
-  	exec('nkn/./nknc --ip testnet-node-0001.nkn.org --port 30003 info -c', (error, stdout, stderr) => {
+  	exec('../nkn/./nknc --ip testnet-node-0001.nkn.org --port 30003 info -c', (error, stdout, stderr) => {
      if (error) {
        console.error(`exec error: ${error}`);
        return;
@@ -330,7 +330,7 @@ _*Speculative balance calculated at 5:1 testnet:mainnet ratio, at current market
    }
      });
 
-        exec('nkn/./nknc --ip 138.197.147.97 --port 30003 info -c', (error, stdout, stderr) => {
+        exec('../nkn/./nknc --ip 138.197.147.97 --port 30003 info -c', (error, stdout, stderr) => {
      if (error) {
        console.error(`exec error: ${error}`);
        return;
@@ -369,7 +369,7 @@ _*Speculative balance calculated at 5:1 testnet:mainnet ratio, at current market
    var array = ip.split(',');
    var arrayLength = array.length;
       for (var i = 0; i < arrayLength; i++) {
-          var c = `nkn/./nknc --ip ${array[i]} --port 30003 info -s`;
+          var c = `../nkn/./nknc --ip ${array[i]} --port 30003 info -s`;
 
 
          exec(c, (error, stdout, stderr) => {
@@ -406,7 +406,7 @@ _*Speculative balance calculated at 5:1 testnet:mainnet ratio, at current market
    var arrayLength = array.length;
       for (var i = 0; i < arrayLength; i++) {
         x = array[i].replace(/\s/g, '');
-          var c = `nkn/./nknc --ip ${x} --port 30003 info -s`;
+          var c = `../nkn/./nknc --ip ${x} --port 30003 info -s`;
 
 
          exec(c, (error, stdout, stderr) => {
@@ -444,7 +444,7 @@ _*Speculative balance calculated at 5:1 testnet:mainnet ratio, at current market
    var arrayLength = array.length;
       for (var i = 0; i < arrayLength; i++) {
           x = array[i].replace(/\s/g, '');
-          var c = `nkn/./nknc --ip ${x} --port 30003 info -c`;
+          var c = `../nkn/./nknc --ip ${x} --port 30003 info -c`;
 
          exec(c, (error, stdout, stderr) => {
            if (error) {
@@ -472,14 +472,14 @@ _*Speculative balance calculated at 5:1 testnet:mainnet ratio, at current market
       }*/
 
   if(command === "nodestats") {
-   var c = `nkn/./nknc --ip testnet-node-0001.nkn.org --port 30003 info -s`;
-   var d = `nkn/./nknc --ip testnet-node-0001.nkn.org --port 30003 info -c`;
+   var c = `../nkn/./nknc --ip testnet-node-0001.nkn.org --port 30003 info -s`;
+   var d = `../nkn/./nknc --ip testnet-node-0001.nkn.org --port 30003 info -c`;
    if(args[0]){
      if(args[0]!==`i`){
        let ip = args[0];
        console.log(ip);
-       c = `nkn/./nknc --ip ${ip} --port 30003 info -s`;
-       d = `nkn/./nknc --ip ${ip} --port 30003 info -c`;
+       c = `../nkn/./nknc --ip ${ip} --port 30003 info -s`;
+       d = `../nkn/./nknc --ip ${ip} --port 30003 info -c`;
      }
    }
    exec(c, (error, stdout, stderr) => {
