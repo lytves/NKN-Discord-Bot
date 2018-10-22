@@ -404,7 +404,6 @@ Change (24h): ${numberFormat(response.data.data.quotes.USD.percent_change_24h)}%
         if (args[0]) {
 
         }
-
     }
 
 // *****************************************************************************

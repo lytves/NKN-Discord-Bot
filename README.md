@@ -1,11 +1,15 @@
 # NKN Discord Bot
-Add your Discord bot token (https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) to config.json.
 
-<br>Then:<br>
-`npm install`<br>
-`node index.js`<br>
-<br>
-You will need:
-+ NKN node running on your machine
-+ run the bot from its own directory in `/src/github.com/nknorg` directory
-(or feel free to modify the path to `./nknc` in index.js)
+A Discord bot to control states of NKN nodes and let you know about some NKN tokenometric information
+
+To use all bot's functiones you will need NKN's node running on your machine
+
+Configuration:
++ **token** - add your Discord bot token (https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) to config.json.
++ **path** - path to your running NKN's node
+
+Then:
+```
+# npm install
+# node index.js
+```
