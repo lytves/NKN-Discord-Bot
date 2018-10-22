@@ -1,4 +1,5 @@
-{ 
+{
   "token"  : "<ENTER DISCORD BOT TOKEN HERE>",
-  "prefix" : "+"
+  "prefix" : "+",
+  "path": "<ENTER THE DIRECTORY OF YOUR NKN NODE HERE>"
 }
