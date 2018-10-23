@@ -7,16 +7,16 @@ const client = new Discord.Client();
 // Here we load the config.json file that contains our token and our prefix values. 
 const config = require("./config.json");
 // config.token contains the bot's token
-// config.prefix contains the message prefix.
+// config.prefix contains the message prefix
+// config.path contains the nkn's node path
 
 //child process for NKN
 var exec = require('child_process').exec, child;
 
 var execSync = require('child_process').execSync, child;
 
-var fs = require('fs');
-
 // got it from https://stackoverflow.com/a/36734774/6841308
+// to format the numbers with quiet good format
 function numberFormat(labelValue) {
 
     // Nine Zeroes for Billions
@@ -129,27 +129,31 @@ client.on("message", async message => {
     // *****************************************************************************
     if (command === "health") {
 
-        var seed = 0;
-        var node = 0;
+        let seedNodeResponded;
 
-        var process_c = exec(`${config.path}/nknc --ip testnet-node-0001.nkn.org --port 30003 info -c`, (error, stdout, stderr) => {
+        let process_c = exec(`${config.path}/nknc --ip testnet-node-0001.nkn.org --port 30003 info -c`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`exec error: ${error}`);
                 return;
             }
             console.log(`stdout: ${stdout}`);
             console.log(`stderr: ${stderr}`);
-            if (stderr) {
-                message.channel.send(`:red_circle: Seed node is down.`);
-            }
+            // if (stderr) {
+            //     message.channel.send(`:red_circle: Seed node is down.`);
+            // }
             //parse
             if (stdout) {
+                seedNodeResponded = true;
                 message.channel.send(`:large_blue_circle:  Seed node is up.`);
+            }
+            else {
+                message.channel.send(`:red_circle: Seed node is down.`);
             }
         });
 
         setTimeout(function () {
-            process_c.kill()
+            if (!seedNodeResponded) message.channel.send(`:red_circle: Seed node is down.`);
+            process_c.kill();
         }, 2000);
     }
 
@@ -310,6 +314,7 @@ Max Possible Supply: ${numberFormat(response.data.data.max_supply)}`);
 
             console.log(ip);
 
+            // to check if we are verifing self node IP address
             try {
                 let response = execSync(`${config.path}/nknc --port 30003 info -s`, {timeout: 1000}).toString();
 
@@ -349,9 +354,9 @@ Max Possible Supply: ${numberFormat(response.data.data.max_supply)}`);
                 message.channel.send(msg);
             }
 
-            if (stderr) {
-                message.channel.send("Error!");
-            }
+            // if (stderr) {
+            //     message.channel.send("Error! " + stderr);
+            // }
 
         });
     }
