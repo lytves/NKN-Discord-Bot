@@ -171,7 +171,7 @@ client.on("message", async message => {
             //parse
             if (stdout) {
                 var obj = JSON.parse(stdout);
-                message.channel.send(`Current NKN MainNetwork Block: ${obj['result']}`);
+                message.channel.send(`Current NKN Seed node Block: ${obj['result']}`);
                 // And we get the bot to say the thing:
             }
         });
@@ -399,10 +399,69 @@ Change (24h): ${numberFormat(response.data.data.quotes.USD.percent_change_24h)}%
     // *****************************************************************************
     if (command === "nodestats") {
 
-        var response = "";
+        let msg, response, request, request2, ip;
 
-        if (args[0]) {
+        if (args[0] && args[0] !== `i`) {
 
+            ip = args[0];
+            request = `${config.path}/nknc --ip ${ip} --port 30003 info -s`;
+            request2 = `${config.path}/nknc --ip ${ip} --port 30003 info -c`;
+
+        } else {
+
+            request = `${config.path}/nknc --ip testnet-node-0001.nkn.org --port 30003 info -s`;
+            request2 = `${config.path}/nknc --ip testnet-node-0001.nkn.org --port 30003 info -c`;
+            ip = "Seed node";
+
+        }
+
+        try {
+
+            // General (+ addicional ) info
+            response = execSync(request, {timeout: 1000}).toString();
+
+            let obj = JSON.parse(response);
+
+            if (obj['result']) {
+
+                msg = "IP: " + obj['result']['Addr'] + "\n";
+
+                if (obj['result']['SyncState'] === 'PersistFinished') {
+                    msg += `:white_check_mark: **SyncState:** ` + obj['result']['SyncState'];
+                } else {
+                    msg += `:no_entry: **SyncState:** ` + obj['result']['SyncState'];
+                }
+
+                if (args[0] === `i` || args[1] === `i`) {
+
+                    msg += `\nJSON Port: ${obj['result']['JsonPort']}
+Relay: ${obj['result']['Relay']}
+Tx Count: ${obj['result']['TxnCnt']}
+Rx Txn Count: ${obj['result']['RxTxnCnt']}
+ID: ${obj['result']['ID']}
+ChordID: ${obj['result']['ChordID']}`;
+                }
+
+            } else {
+                throw "Error";
+            }
+
+            // Current block info
+            response = execSync(request2, {timeout: 1000}).toString();
+
+            obj = JSON.parse(response);
+
+            if (obj['result']) {
+                msg += "\nCurrent Block: **" + obj['result'] + "**";
+            } else {
+                throw "Error";
+            }
+
+        } catch (e) {
+            msg = `:no_entry: **Unable to connect to node IP ${ip}.** Please try again later.`;
+        }
+        finally {
+            message.channel.send(msg);
         }
     }
 
@@ -420,7 +479,7 @@ Change (24h): ${numberFormat(response.data.data.quotes.USD.percent_change_24h)}%
             let obj = JSON.parse(response);
 
             if (obj['result']) {
-                msg = ":white_check_mark: **NKN MainNetwork SyncState:** " + obj['result']['SyncState'];
+                msg = ":white_check_mark: **NKN Seed node SyncState:** " + obj['result']['SyncState'];
             }
 
             response = execSync(`${config.path}/nknc --ip testnet-node-0001.nkn.org --port 30003 info -c`, {timeout: 1000}).toString();
@@ -433,7 +492,7 @@ Change (24h): ${numberFormat(response.data.data.quotes.USD.percent_change_24h)}%
 
         }
         catch (e) {
-            msg = ":no_entry: **Unable to connect to MainNetwork.** Please try again later.";
+            msg = ":no_entry: **Unable to connect to Seed node.** Please try again later.";
             caught = true;
         }
         finally {
