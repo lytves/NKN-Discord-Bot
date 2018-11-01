@@ -384,18 +384,34 @@ Change (24h): ${numberFormat(response.data.data.quotes.USD.percent_change_24h)}%
     // ***************************     BOT'S COMMAND       *************************
     // *****************************************************************************
     if (command === "nodes") {
-        exec('wc -l < NKNNodeList $(wget http://testnet.nkn.org/node_list/NKNNodeList) && rm NKNNodeList*', (error, stdout, stderr) => {
+
+        exec('curl https://nknx.org/api/crawledNodes', (error, stdout, stderr) => {
+
+            let msg = `:scream: Error counting network nodes!`;
+
             if (error) {
                 console.error(`exec error: ${error}`);
                 message.channel.send("Unable to connect. Please try again later. Go grab a coffee or something!");
                 return;
             }
-            console.log(`stdout: ${stdout}`);
-            console.log(`stderr: ${stderr}`);
-            //parse
-            var msg = `Node Count: ${stdout}`;
-            message.channel.send(msg);
 
+            // console.log(`stdout: ${stdout}`);
+            console.log(`stderr: ${stderr}`);
+
+            try {
+                //parse
+                let nodesCount = JSON.parse(stdout).length;
+                console.log(`nodesCount: ${nodesCount}`);
+
+
+                msg = `Node Count: ${nodesCount}`;
+            }
+            catch (e) {
+
+            }
+            finally {
+                message.channel.send(msg);
+            }
         });
     }
 
@@ -533,7 +549,7 @@ ChordID: ${obj['result']['ChordID']}`;
                     obj = JSON.parse(response);
 
                     if (obj['result']) {
-                        msg += "\nCurrent Network Block: **" + obj['result'] + "**";
+                        msg += "\nCurrent node block: **" + obj['result'] + "**";
                     }
                 } catch (e) {
                     msg = `:no_entry: **Unable to connect to node IP ${array[i]}.** Please try again later.`;
